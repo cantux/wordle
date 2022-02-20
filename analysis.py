@@ -110,11 +110,17 @@ def find_next_best_guess(pos_hint, should_contain, banned_letters):
                                 best_cand = [candidate, c_s]
     elif banned_letters:
         for c in range(26):
-            if chr(c + ord_a) not in banned_letters:
+            if chr(c + ord_a - 1) not in banned_letters:
                 for i in range(5):
                     for candidate, c_s in char_pos_dct[c][i]:
-                        if best_cand[1] < c_s:
-                            best_cand = [candidate, c_s]
+                        contains_banned = False
+                        for cand_c in candidate:
+                            if cand_c in banned_letters:
+                                contains_banned = True
+                                break
+                        if not contains_banned:
+                            if best_cand[1] < c_s:
+                                best_cand = [candidate, c_s]
 
     else:
         best_cand = starter_words[-1]
@@ -130,7 +136,7 @@ def score(guess, word, pos_hint, should_contain, banned_letters):
             banned_letters.add(guess[i])
 
 def test():
-    word = "eerie"
+    word = "tacit"
     pos_hint = ["", "", "", "", ""]
     should_contain = defaultdict(set)
     banned_letters = set()
@@ -157,16 +163,17 @@ if __name__ == "__main__":
     set_starter_words()
 
 
-#     pos_hint = ["", "", "", "", ""]
+#     pos_hint = ["a", "l", "o", "", ""]
 #     should_contain = defaultdict(set)
-#     banned_letters = set(['a', 'e', 'r', 's'])
-#     should_contain['o'] = set([2])
+#     banned_letters = set(['e', 'r', 's', 'b', 'd', 'g'])
+#     should_contain['l'] = set([1])
+#     should_contain['i'] = set([2])
 #     print(pos_hint)
 #     print(should_contain)
 #     print(banned_letters)
-# 
+
 #     guess = find_next_best_guess(pos_hint, should_contain, banned_letters)
-# 
+
 #     print(guess)
     test()
 
